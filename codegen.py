@@ -10,6 +10,9 @@ m, n = csr.shape
 
 with open('spmv2.c', 'w') as out:
   out.write('double vals[%d] = {%s};\n' % (len(csr.data), ','.join(map(str, csr.data))))
+  out.write('int idx[%d] = {%s};\n' % (len(csr.data), ','.join(map(str, csr.indices))))
+  out.write('int pos[%d] = {%s};\n' % (len(csr.data), ','.join(map(str, csr.indptr))))
+  out.write('int size = %s;\n' % m)
   out.write('void spmv2(double  *restrict a, double *restrict x, double *restrict y) {\n')
   for i in range(m):
     col_idxs = csr.indices[csr.indptr[i]:csr.indptr[i+1]]
