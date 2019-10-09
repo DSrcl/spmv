@@ -1,9 +1,12 @@
-CXXFLAGS  = -I${TACO_INCLUDE} -std=c++11 -O3
-LDFLAGS = -ltaco -L${TACO_LIB}
+CXXFLAGS  = -O3 -mfma -mavx -mavx2 -mtune=native
 
-all: build_idxs spmv
+all: mat.c spmv
 
-spmv: spmv.o fast.o
+spmv: spmv.o spmv2.o
 	$(CXX) -o $@ $^ $(LDFLAGS)
 
-build_idxs: build_idxs.cc
+spmv2.o: spmv2.c
+	$(CC) $(CXXFLAGS) $^ -o $@ -c
+
+clean:
+	rm -f fast.o spmv.o fast.o fast.s smpv2.o
